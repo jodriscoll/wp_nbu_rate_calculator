@@ -1,0 +1,501 @@
+/*=======================================================================================
+ * Rate Calculator
+ *=====================================================================================*/
+$calculator-js-active-panel-class: 'js-active';
+$calculator-js-selected-class:     'js-rc-selected';
+$calculator-form-field-padding:    13px;
+$calculator-form-field-shadow:     0 0 8px rgba(0,0,0,.5);
+
+@mixin transition-mix ($property: all, $duration: 0.2s, $timing: linear, $delay: 0s) {
+	transition-property: $property;
+	transition-duration: $duration;
+	transition-timing-function: $timing;
+	transition-delay: $delay;
+}
+
+@mixin toggleVisible() {
+	opacity: 0;
+	height: 0;
+	visibility: hidden;
+
+	// active panels
+	&.#{$calculator-js-active-panel-class} {
+		@include transition-mix($duration: .25s);
+		height: auto;
+		opacity: 1;
+		visibility: visible;
+	}
+}
+
+.rate-calculator {
+	position: relative;
+	line-height: 1.2;
+
+	@media (min-width: 768px) {
+		border: 1px solid lighten(#000, 80%);
+		border-radius: 2px;
+		padding: 20px 0;
+	}
+
+	a {
+		text-decoration: underline;
+	}
+}
+
+.rate-calculator__wrapper {
+	margin: 0;
+	padding: 0;
+
+	@media (min-width: 768px) {
+		padding: 0 20px;
+	}
+
+	.rate-calculator__fields {
+		padding: 0 20px;
+
+		@media (min-width: 768px) {
+			padding: 0;
+		}
+	}
+}
+
+.rate-calculator__title {
+	color: #37373c;
+	font-weight: 500;
+	line-height: 1.2;
+	padding: 0;
+	position: relative;
+	font-size: 20px;
+	display: inline-block;
+	text-transform: uppercase;
+	margin: 0;
+
+	@media (min-width: 540px) {
+		font-size: 24px;
+	}
+	@media (min-width: 768px) {
+		text-align: center;
+		position: absolute;
+		left: 50%;
+		top: 0;
+		background-color: #fff;
+		transform: translateX(-50%) translateY(-50%);
+		padding: 0 4px;
+	}
+}
+
+.rate-calculator__top {
+	padding: 0;
+
+	& > div {
+		font-weight: bold;
+		font-size: 20px;
+		line-height: (3/2);
+		text-align: center;
+		margin-top: 16px;
+
+		&.rate-calculator__top--hide {
+			display: none;
+		}
+
+		&:first-child {
+			margin: 0;
+			padding-top: 28px;
+		}
+		&:last-child {
+			padding-bottom: 28px;
+		}
+	}
+}
+
+.rate-calculator__panel {
+	display: none;
+
+	.wysiwyg {
+		padding-top: 24px;
+	}
+
+	&.js-active {
+		display: block;
+	}
+}
+
+.rate-calculator__panel__notes {
+	padding-top: 48px;
+
+	p {
+		margin: 12px 0;
+		line-height: 1.2;
+		font-size: 14px;
+
+		&:first-child {
+			margin-top: 0;
+		}
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+}
+
+.page-template-rate-calculator {
+	.main {
+		@media (max-width: 540px) {
+			overflow: hidden;
+		}
+	}
+
+	.content {
+		@media (max-width: 576px) {
+			padding-bottom: 0;
+		}
+	}
+}
+
+.rate-calculator {
+	input,
+	select {
+		appearance: none;
+		border: none;
+		border-radius: 0;
+		box-shadow: $calculator-form-field-shadow;
+		font-size: 16px;
+		padding: $calculator-form-field-padding;
+		width: 100%;
+	}
+
+	select {
+		background-color: #fff;
+		background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 57 34" width="57" height="34"%3E%3Cstyle%3E tspan %7B white-space:pre %7D .shp0 %7B fill: %238a8b8f %7D %3C/style%3E%3Cpath class="shp0" d="M1.18 1.1L55.54 1C56.6 1 57.03 1.49 56.5 2.09L29.46 33.05C28.93 33.65 28.07 33.65 27.54 33.05L0.23 2.19C-0.3 1.59 0.12 1.1 1.18 1.1Z" /%3E%3C/svg%3E'), linear-gradient(to bottom, #fff 0%, #fff 100%);
+		background-repeat: no-repeat, repeat;
+		background-position: right 7px top 50%, 0 0;
+		background-size: 20px auto, 100%;
+		padding: $calculator-form-field-padding 4rem $calculator-form-field-padding $calculator-form-field-padding;
+		white-space: pre-wrap;
+	}
+}
+
+.rate-calculator__services,
+.rate-calculator__fields {
+	font-size: 0;
+	text-align: center;
+	margin-left: -24px;
+	margin-bottom: 24px;
+}
+
+.rate-calculator__button {
+	text-align: center;
+	margin: 0;
+	padding: 24px 0 0 0;
+	transform: translateZ(0);
+	-webkit-backface-visibility: hidden;
+
+	button {
+		&:hover, &:focus {
+			cursor: pointer;
+		}
+	}
+	&.back-parent-hide {
+		display: none;
+	}
+}
+
+.js-rc-preloader {
+	display: none;
+	&.js-active {
+		display: block;
+	}
+}
+
+.rate-calculator__footnote {
+	text-align: center;
+	padding-top: 48px;
+
+	p {
+		margin: 16px 0;
+
+		&:first-child {
+			margin-top: 0;
+		}
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	&.rate-calculator__footnote--hide {
+		display: none;
+	}
+}
+
+.rate-calculator__service,
+.rate-calculator__field {
+	width: 100%;
+	font-size: 16px;
+	box-sizing: border-box;
+	padding-left: 24px;
+	margin-top: 24px;
+
+	label {
+		font-size: 12px;
+		font-weight: 700;
+		margin-bottom: 12px;
+		margin-top: 24px;
+		text-align: left;
+
+		&:first-child {
+			margin-top: 12px;
+		}
+	}
+
+	@media (min-width: 768px) {
+		width: 50%;
+	}
+
+	input[type="number"],
+	label {
+		display: block;
+		width: 100%;
+	}
+
+	input[type="radio"] {
+		-webkit-appearance: radio;
+		border: initial;
+		box-shadow: none;
+		margin: 0 0 0 6px;
+		padding: 0;
+		width: auto;
+	}
+
+	fieldset {
+		border: 0;
+		margin-top: 24px;
+		width: 100%;
+	}
+}
+
+.rate-calculator__field {
+	display: inline-block;
+}
+
+.rate-calculator__service {
+	display: none;
+	vertical-align: top;
+
+	&.js-rc-selected {
+		display: inline-block;
+	}
+}
+
+.service-callout {
+	text-align: center;
+
+	.callout-icon__icon {
+		display: inline-block;
+		width: 80px;
+		height: 64px;
+		padding: 0;
+		text-align: center;
+		margin: 0;
+
+		&::before {
+			margin: 0;
+			transform-origin: center;
+			transform: translateY(-50%) translateX(-50%) scale(.8);
+			position: absolute;
+			left: 50%;
+			top: 50%;
+		}
+	}
+
+	.title {
+		font-size: 24px;
+		font-weight: 700;
+		margin-top: 20px;
+		margin-bottom: 12px;
+	}
+}
+
+.rate-calculator__results {
+	margin-bottom: 24px;
+
+	.result {
+		display: block;
+		position: relative;
+		height: 14px;
+		width: 100%;
+		margin: 8px 0 8px auto;
+		font-size: 14px;
+		line-height: 1;
+
+		&.result--note {
+			height: auto;
+			line-height: 1.2;
+
+			&::before {
+				display: none;
+			}
+		}
+
+		@media (min-width: 768px) {
+			width: calc(100% - 104px);
+		}
+
+		&::before {
+			content: '';
+			width: 100%;
+			height: 1px;
+			background-color: #000;
+			position: absolute;
+			left: 0;
+			top: 50%;
+			transform: translateY(-50%);
+		}
+
+		.result__label,
+		.price {
+			background-color: #fff;
+			position: absolute;
+			left: 0;
+			top: 0;
+			display: inline-block;
+			padding-right: 4px;
+		}
+
+		.price {
+			left: auto;
+			right: 0;
+			padding-right: 0;
+			padding-left: 4px;
+		}
+	}
+
+	.result-group-label {
+		display: block;
+		width: 100%;
+		margin: 32px 0 16px auto;
+		font-size: 18px;
+		line-height: 1;
+		font-weight: 500;
+
+		@media (min-width: 768px) {
+			width: calc(100% - 104px);
+		}
+	}
+
+	.service-callout + .result-group-label {
+		margin-top: 0;
+	}
+}
+
+.rate-calculator__results .result.result--total {
+	margin-top: 32px;
+
+	.result__label, 
+	.price {
+		font-weight: 500;
+	}
+}
+
+.final-result {
+	border-top: 1px solid #000;
+	margin-top: 32px;
+	padding-top: 32px;
+
+	.result__label, 
+	.price {
+		font-weight: 500;
+	}
+}
+
+
+.service-callout.service-callout--result {
+	text-align: left;
+	margin-top: 32px;
+	padding-top: 32px;
+	border-top: 1px solid #000;
+	margin-bottom: 12px;
+
+	.title {
+		display: inline-block;
+		width: auto;
+		padding-bottom: 16px;
+		margin: 0 0 0 24px;
+		vertical-align: bottom;
+	}
+
+	.callout-icon__icon {
+		vertical-align: bottom;
+	}
+}
+
+.service-details {
+	text-align: left;
+
+	p {
+		font-size: 14px;
+		line-height: (18/14);
+		margin-top: 3px;
+
+		&:first-child {
+			margin-top: 1rem;
+		}
+		&:last-child {
+			margin-bottom: 24px;
+		}
+	}
+}
+
+.rate-calculator__city-services {
+	font-size: 0;
+
+	.service-callout {
+		text-align: left;
+	}
+}
+
+.water-home-use {
+	.title {
+		color: #1755ae;
+	}
+}
+
+.water-irrigation {
+	.title {
+		color: #356b8d;
+	}
+
+	.icon-irrigation {
+		background-color: #356b8d;
+
+		&::after {
+			border-left-color: #2c5e7e;
+
+			@media (min-width: 768px) {
+				border-left-color: transparent;
+				border-top-color: #2c5e7e;
+			}
+		}
+	}
+}
+
+.electricity {
+	.title {
+		color: #c85016;
+	}
+}
+
+.wastewater {
+	.title {
+		color: #024928;
+	}
+}
+
+.city-services {
+	.title {
+		color: #535557;
+	}
+
+	.explanation-text {
+		color: #a7a9ac;
+		line-height: 1.5;
+	}
+}
